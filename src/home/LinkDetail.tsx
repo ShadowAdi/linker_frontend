@@ -4,6 +4,7 @@ import { BASE_URL } from "../../constants/baseUrl";
 import axios from "axios";
 import { toast } from "react-toastify";
 import type { LinkDataType } from "../../types/linkType";
+import { useUser } from "../../store/UserAuthContext";
 
 const LinkDetail = () => {
   const { linkId } = useParams();
@@ -11,9 +12,21 @@ const LinkDetail = () => {
     null
   );
 
+  const [token, setToken] = useState("");
+  const { getToken } = useUser();
+
+  useEffect(() => {
+    const localToken = getToken();
+    setToken(localToken!);
+  }, []);
+
   const GetLink = async (linkId: string) => {
     try {
-      const response = await axios.get(`${BASE_URL}links/${linkId}`);
+      const response = await axios.get(`${BASE_URL}links/${linkId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.data;
       if (data.success) {
         setLinkDetailData(data.userLinks);
