@@ -1,5 +1,8 @@
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/baseUrl";
+import { toast } from "react-toastify";
 
 interface LinkData {
   id: string;
@@ -13,64 +16,24 @@ interface LinkData {
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [links] = useState<LinkData[]>([
-    {
-      id: "1",
-      url: "https://github.com/facebook/react",
-      title: "React - A JavaScript library for building user interfaces",
-      imageUrl:
-        "https://repository-images.githubusercontent.com/10270250/03890c00-d93e-11e9-8aa0-d0a3e2e9c9e6",
-      domain: "github.com",
-      createdAt: "2024-01-15T10:30:00Z",
-      updatedAt: "2024-01-15T10:30:00Z",
-    },
-    {
-      id: "2",
-      url: "https://tailwindcss.com/docs",
-      title: "Tailwind CSS Documentation",
-      imageUrl:
-        "https://tailwindcss.com/_next/static/media/social-square.b622e290e82093c36cca57092ffe494f.jpg",
-      domain: "tailwindcss.com",
-      createdAt: "2024-01-14T15:45:00Z",
-      updatedAt: "2024-01-14T15:45:00Z",
-    },
-    {
-      id: "3",
-      url: "https://www.typescriptlang.org/",
-      title: "TypeScript: JavaScript With Syntax For Types",
-      imageUrl: "https://www.typescriptlang.org/images/typescript-logo-128.png",
-      domain: "typescriptlang.org",
-      createdAt: "2024-01-13T09:20:00Z",
-      updatedAt: "2024-01-13T09:20:00Z",
-    },
-    {
-      id: "4",
-      url: "https://nodejs.org/en/docs/",
-      title: "Node.js Documentation",
-      imageUrl: null,
-      domain: "nodejs.org",
-      createdAt: "2024-01-12T14:15:00Z",
-      updatedAt: "2024-01-12T14:15:00Z",
-    },
-    {
-      id: "5",
-      url: "https://developer.mozilla.org/en-US/docs/Web/JavaScript",
-      title: "JavaScript | MDN Web Docs",
-      imageUrl: "https://developer.mozilla.org/mdn-social-share.cd6c4a5a.png",
-      domain: "developer.mozilla.org",
-      createdAt: "2024-01-11T11:00:00Z",
-      updatedAt: "2024-01-11T11:00:00Z",
-    },
-    {
-      id: "6",
-      url: "https://vitejs.dev/",
-      title: "Vite | Next Generation Frontend Tooling",
-      imageUrl: "https://vitejs.dev/og-image.png",
-      domain: "vitejs.dev",
-      createdAt: "2024-01-10T16:30:00Z",
-      updatedAt: "2024-01-10T16:30:00Z",
-    },
-  ]);
+  const [links, setLinks] = useState<LinkData[]>([]);
+
+  const GetAllLinks = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}links/`);
+      const data = await response.data;
+      if (data.success) {
+        setLinks(data.userLinks);
+      }
+    } catch (error) {
+      console.error(`Error in getting links data `, error);
+      toast("Failed to get the Links");
+    }
+  };
+
+  useEffect(() => {
+    // GetAllLinks();
+  }, []);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -88,7 +51,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
       <div className="  border-b border-amber-200 py-6 px-4 sm:px-6 lg:px-8 ">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between sm:flex-row flex-col space-y-5  items-start sm:items-center">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-amber-800 to-orange-700 bg-clip-text text-transparent">
               Your Links

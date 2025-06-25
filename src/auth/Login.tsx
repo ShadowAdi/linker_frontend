@@ -1,5 +1,8 @@
+import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/baseUrl";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -7,6 +10,8 @@ const Login = () => {
     password: "",
     rememberMe: false,
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -16,9 +21,18 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Login data:", formData);
+    const response = await axios.post(`${BASE_URL}user/login/`, formData);
+    const data = await response.data;
+    console.log("data ",data)
+    if (data.success) {
+      toast(data.message);
+      navigate("/home");
+    } else {
+      toast(data.message);
+      console.log(data?.error);
+    }
   };
 
   return (
