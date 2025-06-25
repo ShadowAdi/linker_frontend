@@ -21,7 +21,7 @@ const CreateLink: React.FC = () => {
   });
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  const { fetchUser, getToken } = useUser();
+  const {  getToken } = useUser();
 
   useEffect(() => {
     const localToken = getToken();
@@ -35,14 +35,16 @@ const CreateLink: React.FC = () => {
     setFormData({ url: value });
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  try {
     const response = await axios.post(`${BASE_URL}links/`, formData, {
       headers: {
-        Authorization: `Bearer `,
+        Authorization: `Bearer ${token}`,
       },
     });
-    const data = await response.data;
+
+    const data = response.data;
     if (data.success) {
       toast(`${data.message} with name ${data.userLinks?.title}`);
       navigate(`/link/${data.userLinks?._id}`);
@@ -50,7 +52,11 @@ const CreateLink: React.FC = () => {
       toast(`${data.message}`);
       console.log("Failed to create link ", data.error);
     }
-  };
+  } catch (err: any) {
+    toast("Something went wrong");
+    console.error(err);
+  }
+};
 
   return (
     <div>
