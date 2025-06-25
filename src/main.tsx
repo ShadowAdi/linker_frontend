@@ -10,6 +10,7 @@ import Home from "./home/Home.tsx";
 import AppLayout from "./home/AppLayout.tsx";
 import CreateLink from "./home/CreateLink.tsx";
 import LinkDetail from "./home/LinkDetail.tsx";
+import { ToastContainer } from "react-toastify";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -27,5 +28,6 @@ createRoot(document.getElementById("root")!).render(
         </Route>
       </Routes>
     </BrowserRouter>
+    <ToastContainer />
   </StrictMode>
 );

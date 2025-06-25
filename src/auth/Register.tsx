@@ -1,5 +1,8 @@
+import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/baseUrl";
+import { toast } from "react-toastify";
 
 interface RegisterFormData {
   name: string;
@@ -11,33 +14,50 @@ const Register: React.FC = () => {
   const [formData, setFormData] = useState<RegisterFormData>({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Registration data:", formData);
-    // Handle registration logic here
+    const response = await axios.post(`${BASE_URL}user/`, formData);
+    const data = await response.data;
+    if (data.success) {
+      toast(data.message);
+      navigate("/login");
+    } else {
+      toast(data.message);
+      console.log(data?.error);
+    }
   };
 
   return (
     <div>
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-amber-900 mb-2">Create Account</h2>
-        <p className="text-amber-600">Join LinkSaver and start organizing your links</p>
+        <h2 className="text-2xl font-bold text-amber-900 mb-2">
+          Create Account
+        </h2>
+        <p className="text-amber-600">
+          Join LinkSaver and start organizing your links
+        </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-amber-800 mb-2">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-amber-800 mb-2"
+          >
             Full Name
           </label>
           <input
@@ -53,7 +73,10 @@ const Register: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-amber-800 mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-amber-800 mb-2"
+          >
             Email Address
           </label>
           <input
@@ -69,7 +92,10 @@ const Register: React.FC = () => {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-amber-800 mb-2">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-amber-800 mb-2"
+          >
             Password
           </label>
           <input
@@ -103,8 +129,6 @@ const Register: React.FC = () => {
           </Link>
         </p>
       </div>
-
-   
     </div>
   );
 };
