@@ -1,8 +1,15 @@
 import axios from "axios";
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import {
+  useContext,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/baseUrl";
 import { toast } from "react-toastify";
+import { useUser } from "../../store/UserAuthContext";
 
 interface AddLinkFormData {
   url: string;
@@ -13,6 +20,15 @@ const CreateLink: React.FC = () => {
     url: "",
   });
   const navigate = useNavigate();
+  const [token, setToken] = useState("");
+  const { fetchUser, getToken } = useUser();
+
+  useEffect(() => {
+    const localToken = getToken();
+    setToken(localToken!);
+  }, []);
+
+  
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
