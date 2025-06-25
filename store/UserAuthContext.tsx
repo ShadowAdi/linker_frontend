@@ -1,4 +1,4 @@
-import  {
+import {
   createContext,
   useContext,
   useState,
@@ -15,12 +15,15 @@ type UserContextType = {
   logout: () => void;
   getToken: () => string | null;
   setToken: (token: string) => void;
+  globalLoading: boolean;
+  setGlobalLoading: (val: boolean) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserType | null>(null);
+  const [globalLoading, setGlobalLoading] = useState(true);
 
   const getToken = () => {
     return localStorage.getItem("token");
@@ -37,7 +40,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchUser = async () => {
     const token = getToken();
-    if (!token) return;
+    if (!token) {
+      setUser(null);
+      setGlobalLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.get<UserType>(`${BASE_URL}user/me/`, {
@@ -49,6 +56,8 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     } catch (err) {
       console.error("Failed to fetch user:", err);
       logout();
+    } finally {
+      setGlobalLoading(false);
     }
   };
 
@@ -58,7 +67,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, fetchUser, logout, getToken, setToken }}
+      value={{
+        user,
+        fetchUser,
+        logout,
+        getToken,
+        setToken,
+        globalLoading,
+        setGlobalLoading,
+      }}
     >
       {children}
     </UserContext.Provider>
