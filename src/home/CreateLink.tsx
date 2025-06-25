@@ -1,5 +1,8 @@
+import axios from "axios";
 import { useState, type ChangeEvent, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../../constants/baseUrl";
+import { toast } from "react-toastify";
 
 interface AddLinkFormData {
   url: string;
@@ -7,17 +10,30 @@ interface AddLinkFormData {
 
 const CreateLink: React.FC = () => {
   const [formData, setFormData] = useState<AddLinkFormData>({
-    url: ""
+    url: "",
   });
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setFormData({ url: value });
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Link data:", formData);
+    const response = await axios.post(`${BASE_URL}links/`, formData, {
+      headers: {
+        Authorization: `Bearer `,
+      },
+    });
+    const data = await response.data;
+    if (data.success) {
+      toast(`${data.message} with name ${data.userLinks?.title}`);
+      navigate(`/link/${data.userLinks?._id}`);
+    } else {
+      toast(`${data.message}`);
+      console.log("Failed to create link ", data.error);
+    }
   };
 
   return (
@@ -29,7 +45,10 @@ const CreateLink: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label htmlFor="url" className="block text-sm font-medium text-amber-800 mb-2">
+          <label
+            htmlFor="url"
+            className="block text-sm font-medium text-amber-800 mb-2"
+          >
             URL
           </label>
           <input
