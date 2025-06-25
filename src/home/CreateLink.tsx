@@ -21,42 +21,43 @@ const CreateLink: React.FC = () => {
   });
   const navigate = useNavigate();
   const [token, setToken] = useState("");
-  const {  getToken } = useUser();
+  const { getToken } = useUser();
 
   useEffect(() => {
     const localToken = getToken();
     setToken(localToken!);
   }, []);
 
-  
-
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setFormData({ url: value });
   };
 
-const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  try {
-    const response = await axios.post(`${BASE_URL}links/`, formData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = response.data;
-    if (data.success) {
-      toast(`${data.message} with name ${data.userLinks?.title}`);
-      navigate(`/link/${data.userLinks?._id}`);
-    } else {
-      toast(`${data.message}`);
-      console.log("Failed to create link ", data.error);
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    if (!token) {
+      return;
     }
-  } catch (err: any) {
-    toast("Something went wrong");
-    console.error(err);
-  }
-};
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${BASE_URL}links/`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data;
+      if (data.success) {
+        toast(`${data.message} with name ${data.userLinks?.title}`);
+        navigate(`/link/${data.userLinks?._id}`);
+      } else {
+        toast(`${data.message}`);
+        console.log("Failed to create link ", data.error);
+      }
+    } catch (err: any) {
+      toast("Something went wrong");
+      console.error(err);
+    }
+  };
 
   return (
     <div>

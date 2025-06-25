@@ -1,4 +1,4 @@
-import {
+import React, {
   createContext,
   useContext,
   useState,
@@ -47,12 +47,19 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const response = await axios.get<UserType>(`${BASE_URL}user/me/`, {
+      const response = await axios.get(`${BASE_URL}user/me/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      setUser(response.data);
+
+      const data = response.data;
+      if (data.success) {
+        setUser(response.data.user);
+      } else {
+        setUser(null);
+        logout();
+      }
     } catch (err) {
       console.error("Failed to fetch user:", err);
       logout();

@@ -18,6 +18,9 @@ const Home: React.FC = () => {
   }, []);
 
   const GetAllLinks = async () => {
+    if (!token) {
+      return
+    }
     try {
       const response = await axios.get(`${BASE_URL}links/`, {
         headers: {
@@ -30,13 +33,12 @@ const Home: React.FC = () => {
       }
     } catch (error) {
       console.error(`Error in getting links data `, error);
-      toast("Failed to get the Links");
     }
   };
 
   useEffect(() => {
     GetAllLinks();
-  }, []);
+  }, [token]);
 
   const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
@@ -48,7 +50,7 @@ const Home: React.FC = () => {
   };
 
   const handleCardClick = (url: string) => {
-    navigate(`${url}`);
+    navigate(`/link/${url}`);
   };
 
   return (
@@ -109,7 +111,7 @@ const Home: React.FC = () => {
             {links.map((link) => (
               <div
                 key={link.id}
-                onClick={() => handleCardClick(link.url)}
+                onClick={() => handleCardClick(link.id)}
                 className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-amber-200 overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-300 cursor-pointer group"
               >
                 <div className="aspect-video bg-gradient-to-br from-amber-100 to-orange-100 relative overflow-hidden">
@@ -192,48 +194,7 @@ const Home: React.FC = () => {
           </div>
         )}
 
-        {links.length > 0 && (
-          <div className="mt-12 bg-white/70 backdrop-blur-sm rounded-xl shadow-lg border border-amber-200 p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-amber-900">
-                    {links.length}
-                  </div>
-                  <div className="text-sm text-amber-600">Total Links</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-amber-900">
-                    {new Set(links.map((link) => link.domain)).size}
-                  </div>
-                  <div className="text-sm text-amber-600">Unique Domains</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-amber-900">
-                    {
-                      links.filter((link) => {
-                        const weekAgo = new Date();
-                        weekAgo.setDate(weekAgo.getDate() - 7);
-                        return new Date(link.createdAt) > weekAgo;
-                      }).length
-                    }
-                  </div>
-                  <div className="text-sm text-amber-600">This Week</div>
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-amber-600">Last updated</div>
-                <div className="text-lg font-semibold text-amber-900">
-                  {formatDate(
-                    Math.max(
-                      ...links.map((link) => new Date(link.updatedAt).getTime())
-                    ).toString()
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      
       </main>
     </div>
   );

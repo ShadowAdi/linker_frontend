@@ -1,13 +1,20 @@
 import { Navigate } from "react-router-dom";
 import { useUser } from "../store/UserAuthContext";
 import type { JSX } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   children: JSX.Element;
 }
 
 const ProtectedRoute = ({ children }: Props) => {
-  const { user, globalLoading } = useUser();
+  const { user, globalLoading, getToken } = useUser();
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const localToken = getToken();
+    setToken(localToken!);
+  }, []);
 
   if (globalLoading) {
     return (
@@ -15,7 +22,7 @@ const ProtectedRoute = ({ children }: Props) => {
     );
   }
 
-  if (!user) {
+  if (!user && !token) {
     return <Navigate to="/login" replace />;
   }
 

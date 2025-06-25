@@ -21,6 +21,9 @@ const LinkDetail = () => {
   }, []);
 
   const GetLink = async (linkId: string) => {
+    if (!token) {
+      return
+    }
     try {
       const response = await axios.get(`${BASE_URL}links/${linkId}`, {
         headers: {
@@ -41,7 +44,7 @@ const LinkDetail = () => {
     if (linkId) {
       GetLink(linkId);
     }
-  }, [linkId]);
+  }, [linkId,token]);
 
   if (!linkDetailData) return <div>Loading...</div>;
   linkDetailData && (
