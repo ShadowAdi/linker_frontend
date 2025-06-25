@@ -9,21 +9,20 @@ import { useUser } from "../../store/UserAuthContext";
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [links, setLinks] = useState<LinkDataType[]>([]);
-    const [token, setToken] = useState("");
-    const {  getToken } = useUser();
-  
-    useEffect(() => {
-      const localToken = getToken();
-      setToken(localToken!);
-    }, []);
-  
+  const [token, setToken] = useState("");
+  const { getToken } = useUser();
+
+  useEffect(() => {
+    const localToken = getToken();
+    setToken(localToken!);
+  }, []);
 
   const GetAllLinks = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}links/`,{
-         headers: {
-        Authorization: `Bearer ${token}`,
-      },
+      const response = await axios.get(`${BASE_URL}links/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const data = await response.data;
       if (data.success) {
