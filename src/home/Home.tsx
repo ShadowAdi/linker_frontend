@@ -3,20 +3,11 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/baseUrl";
 import { toast } from "react-toastify";
-
-interface LinkData {
-  id: string;
-  url: string;
-  title: string;
-  imageUrl?: string | null;
-  domain: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { type LinkDataType } from "../../types/linkType";
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
-  const [links, setLinks] = useState<LinkData[]>([]);
+  const [links, setLinks] = useState<LinkDataType[]>([]);
 
   const GetAllLinks = async () => {
     try {

@@ -9,8 +9,8 @@ import Register from "./auth/Register.tsx";
 import Home from "./home/Home.tsx";
 import AppLayout from "./home/AppLayout.tsx";
 import CreateLink from "./home/CreateLink.tsx";
-import LinkDetail from "./home/LinkDetail.tsx";
 import { ToastContainer } from "react-toastify";
+import LinkDetail from "./home/LinkDetail.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

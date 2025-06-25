@@ -1,32 +1,44 @@
-import React from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { BASE_URL } from "../../constants/baseUrl";
+import axios from "axios";
+import { toast } from "react-toastify";
+import type { LinkDataType } from "../../types/linkType";
 
-const linkData = {
-  id: "123e4567-e89b-12d3-a456-426614174000",
-  url: "https://example.com",
-  title: "Example Website",
-  imageUrl: null,
-  domain: "example.com",
-  summary:
-    "This is a sample summary of the website content that provides detailed information about what visitors can expect to find on this particular website.",
-  tags: ["sample", "test", "website", "demo", "example"],
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-  userId: 1,
-};
+const LinkDetail = () => {
+  const { linkId } = useParams();
+  const [linkDetailData, setLinkDetailData] = useState<LinkDataType | null>(
+    null
+  );
 
-const LinkDetail: React.FC = () => {
-  const linkId = "123e4567-e89b-12d3-a456-426614174000"; // Mock param
-  console.log("link id ", linkId);
+  const GetLink = async (linkId: string) => {
+    try {
+      const response = await axios.get(`${BASE_URL}links/${linkId}`);
+      const data = await response.data;
+      if (data.success) {
+        setLinkDetailData(data.userLinks);
+      }
+    } catch (error) {
+      console.error(`Error in getting links data`, error);
+      toast("Failed to get the Links");
+    }
+  };
 
-  return (
+  useEffect(() => {
+    if (linkId) {
+      GetLink(linkId);
+    }
+  }, [linkId]);
+
+  if (!linkDetailData) return <div>Loading...</div>;
+  linkDetailData && (
     <div className=" bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-5">
           <h1 className="text-3xl font-bold text-amber-900 mb-2 tracking-tight">
-            {linkData.title}
+            {linkDetailData.title}
           </h1>
-      
         </div>
 
         {/* Main Content - Single Column */}
@@ -38,10 +50,10 @@ const LinkDetail: React.FC = () => {
             </h3>
             <img
               src={
-                linkData?.imageUrl ||
+                linkDetailData?.imageUrl ||
                 "https://www.udgamschool.com/wp-content/uploads/2023/05/dummy-image-grey-e1398449111870.jpg"
               }
-              alt={linkData.title}
+              alt={linkDetailData.title}
               className="w-full h-40 object-cover rounded-lg shadow-md"
             />
           </div>
@@ -54,12 +66,12 @@ const LinkDetail: React.FC = () => {
                     Website URL
                   </h3>
                   <a
-                    href={linkData.url}
+                    href={linkDetailData.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-amber-600 hover:text-amber-800 hover:underline transition-colors duration-300 break-all text-lg font-medium"
                   >
-                    {linkData.url}
+                    {linkDetailData.url}
                   </a>
                 </div>
                 <button className="ml-4 bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg transition-colors duration-200">
@@ -91,7 +103,7 @@ const LinkDetail: React.FC = () => {
                     Domain
                   </span>
                   <span className="font-medium text-amber-900 bg-amber-100 px-3 py-2 rounded-lg text-sm block">
-                    {linkData.domain}
+                    {linkDetailData.domain}
                   </span>
                 </div>
                 <div className="text-center">
@@ -99,7 +111,7 @@ const LinkDetail: React.FC = () => {
                     Saved On
                   </span>
                   <span className="text-sm text-amber-800 bg-amber-50 px-3 py-2 rounded-lg block">
-                    {new Date(linkData.createdAt).toLocaleDateString()}
+                    {new Date(linkDetailData.createdAt).toLocaleDateString()}
                   </span>
                 </div>
                 <div className="text-center">
@@ -107,7 +119,7 @@ const LinkDetail: React.FC = () => {
                     Last Updated
                   </span>
                   <span className="text-sm text-amber-800 bg-amber-50 px-3 py-2 rounded-lg block">
-                    {new Date(linkData.updatedAt).toLocaleDateString()}
+                    {new Date(linkDetailData.updatedAt).toLocaleDateString()}
                   </span>
                 </div>
               </div>
