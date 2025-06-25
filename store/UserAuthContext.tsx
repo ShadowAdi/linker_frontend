@@ -1,0 +1,74 @@
+import  {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  type ReactNode,
+} from "react";
+import axios from "axios";
+import { type UserType } from "../types/userType";
+import { BASE_URL } from "../constants/baseUrl";
+
+type UserContextType = {
+  user: UserType | null;
+  fetchUser: () => Promise<void>;
+  logout: () => void;
+  getToken: () => string | null;
+  setToken: (token: string) => void;
+};
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [user, setUser] = useState<UserType | null>(null);
+
+  const getToken = () => {
+    return localStorage.getItem("token");
+  };
+
+  const setToken = (token: string) => {
+    localStorage.setItem("token", token);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    setUser(null);
+  };
+
+  const fetchUser = async () => {
+    const token = getToken();
+    if (!token) return;
+
+    try {
+      const response = await axios.get<UserType>(`${BASE_URL}user/me/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setUser(response.data);
+    } catch (err) {
+      console.error("Failed to fetch user:", err);
+      logout();
+    }
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  return (
+    <UserContext.Provider
+      value={{ user, fetchUser, logout, getToken, setToken }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = (): UserContextType => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
+};

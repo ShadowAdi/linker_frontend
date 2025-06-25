@@ -11,23 +11,25 @@ import AppLayout from "./home/AppLayout.tsx";
 import CreateLink from "./home/CreateLink.tsx";
 import { ToastContainer } from "react-toastify";
 import LinkDetail from "./home/LinkDetail.tsx";
-
+import { UserProvider } from "../store/UserAuthContext.tsx";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route index element={<App />} />
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-        <Route element={<AppLayout />}>
-          <Route path="home" element={<Home />} />
-          <Route path="create-link" element={<CreateLink />} />
-          <Route path="link/:linkId" element={<LinkDetail />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-    <ToastContainer />
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route index element={<App />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+          <Route element={<AppLayout />}>
+            <Route path="home" element={<Home />} />
+            <Route path="create-link" element={<CreateLink />} />
+            <Route path="link/:linkId" element={<LinkDetail />} />
+          </Route>
+        </Routes>
+        <ToastContainer />
+      </BrowserRouter>
+    </UserProvider>
   </StrictMode>
 );
