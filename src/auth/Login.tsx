@@ -1,9 +1,5 @@
 import axios from "axios";
-import {
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/baseUrl";
 import { toast } from "react-toastify";
@@ -17,7 +13,7 @@ const Login = () => {
   });
 
   const navigate = useNavigate();
-  const { setToken } = useUser();
+  const { setToken, fetchUser } = useUser();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
@@ -35,6 +31,7 @@ const Login = () => {
     if (data.success) {
       toast(data.message);
       setToken(data.token);
+      await fetchUser();
       navigate("/home");
     } else {
       toast(data.message);
