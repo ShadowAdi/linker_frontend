@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
+import { useUser } from "../store/UserAuthContext";
 
 function App() {
+  const { user } = useUser();
+
   return (
     <div className="h-screen flex flex-col bg-[#FFF7ED]">
       <Header />
@@ -14,20 +17,37 @@ function App() {
             Save, organize, and revisit your favorite links with ease. Get
             started by creating an account or logging in.
           </p>
-          <div className="flex justify-center space-x-4">
-            <Link
-              to="/login"
-              className="px-6 py-2 text-base font-medium text-amber-700 border border-amber-700 rounded-md hover:bg-amber-100 transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="px-6 py-2 text-base font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 transition"
-            >
-              Register
-            </Link>
-          </div>
+          {!user ? (
+            <div className="flex justify-center space-x-4">
+              <Link
+                to="/login"
+                className="px-6 py-2 text-base font-medium text-amber-700 border border-amber-700 rounded-md hover:bg-amber-100 transition"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-6 py-2 text-base font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 transition"
+              >
+                Register
+              </Link>
+            </div>
+          ) : (
+            <div className="flex justify-center space-x-4">
+              <Link
+                to="/home"
+                className="px-6 py-2 text-base font-medium text-amber-700 border border-amber-700 rounded-md hover:bg-amber-100 transition"
+              >
+                Home
+              </Link>
+              <Link
+                to="/create-link"
+                className="px-6 py-2 text-base font-medium text-white bg-amber-600 rounded-md hover:bg-amber-700 transition"
+              >
+                Create Link
+              </Link>
+            </div>
+          )}
         </div>
       </main>
     </div>

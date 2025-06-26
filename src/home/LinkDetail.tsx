@@ -22,7 +22,7 @@ const LinkDetail = () => {
 
   const GetLink = async (linkId: string) => {
     if (!token) {
-      return
+      return;
     }
     try {
       const response = await axios.get(`${BASE_URL}links/${linkId}`, {
@@ -30,9 +30,11 @@ const LinkDetail = () => {
           Authorization: `Bearer ${token}`,
         },
       });
+
       const data = await response.data;
+      console.log("data ", data);
       if (data.success) {
-        setLinkDetailData(data.userLinks);
+        setLinkDetailData(data.linkFound);
       }
     } catch (error) {
       console.error(`Error in getting links data`, error);
@@ -44,10 +46,10 @@ const LinkDetail = () => {
     if (linkId) {
       GetLink(linkId);
     }
-  }, [linkId,token]);
+  }, [linkId, token]);
+  if (!linkDetailData) return <div className="text-center p-8">Loading...</div>;
 
-  if (!linkDetailData) return <div>Loading...</div>;
-  linkDetailData && (
+  return (
     <div className=" bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header Section */}
@@ -58,7 +60,7 @@ const LinkDetail = () => {
         </div>
 
         {/* Main Content - Single Column */}
-        <div className="max-w-6xl mx-auto space-y-6 mb-8 grid space-x-6 items-center grid-cols-2">
+        <div className="max-w-6xl mx-auto space-y-6 mb-8 md:grid space-x-6 items-center  grid-cols-1 md:grid-cols-2">
           <div className="bg-white/70 backdrop-blur-sm border border-amber-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300">
             <h3 className="text-base font-semibold text-amber-900 mb-4 flex items-center">
               <span className="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
@@ -90,7 +92,7 @@ const LinkDetail = () => {
                     {linkDetailData.url}
                   </a>
                 </div>
-                <button className="ml-4 bg-amber-500 hover:bg-amber-600 text-white p-2 rounded-lg transition-colors duration-200">
+                <button className="ml-4 bg-amber-500 cursor-pointer hover:bg-amber-600 text-white p-2 rounded-lg transition-colors duration-200">
                   <svg
                     className="w-4 h-4"
                     fill="none"

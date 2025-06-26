@@ -48,7 +48,7 @@ const CreateLink: React.FC = () => {
       const data = response.data;
       if (data.success) {
         toast(`${data.message} with name ${data.userLinks?.title}`);
-        navigate(`/link/${data.userLinks?._id}`);
+        navigate(`/home`);
       } else {
         toast(`${data.message}`);
         console.log("Failed to create link ", data.error);
@@ -88,7 +88,7 @@ const CreateLink: React.FC = () => {
 
         <button
           type="submit"
-          className="w-full py-3 px-4 bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold rounded-lg hover:from-amber-700 hover:to-orange-700 focus:ring-4 focus:ring-amber-300 transition-all duration-300 hover:scale-[1.02] shadow-lg"
+          className="w-full py-3 cursor-pointer px-4 cursor-pointer bg-gradient-to-r from-amber-600 to-orange-600 text-white font-semibold rounded-lg hover:from-amber-700 hover:to-orange-700 focus:ring-4 focus:ring-amber-300 transition-all duration-300 hover:scale-[1.02] shadow-lg"
         >
           Save Link
         </button>

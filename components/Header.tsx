@@ -1,9 +1,14 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../store/UserAuthContext";
 
 const Header = () => {
   const { user, logout } = useUser();
+  const navigate = useNavigate();
+  const logoutBtn = async () => {
+    logout();
+    navigate("/home");
+  };
 
   return (
     <header className="bg-white/80 backdrop-blur-md shadow-lg border-b border-amber-200 py-4 px-4 sm:px-6 lg:px-8 flex-[0.1]">
@@ -22,8 +27,8 @@ const Header = () => {
                 Hi, {user.name}
               </span>
               <button
-                onClick={logout}
-                className="px-4 py-1.5 text-sm sm:text-base font-medium text-red-700 border-2 border-red-600 rounded-lg hover:bg-red-100 hover:border-red-700 transition-all duration-300 hover:scale-105"
+                onClick={logoutBtn}
+                className="px-4 py-1.5 cursor-pointer text-sm sm:text-base font-medium text-red-700 border-2 border-red-600 rounded-lg hover:bg-red-100 hover:border-red-700 transition-all duration-300 hover:scale-105"
               >
                 Logout
               </button>

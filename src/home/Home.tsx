@@ -56,7 +56,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50">
       <div className="  border-b border-amber-200 py-6 px-4 sm:px-6 lg:px-8 ">
-        <div className="max-w-7xl mx-auto flex justify-between sm:flex-row flex-col space-y-5  items-start sm:items-center">
+        <div className="max-w-9xl mx-auto flex justify-between sm:flex-row flex-col space-y-5  items-start sm:items-center">
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-amber-800 to-orange-700 bg-clip-text text-transparent">
               Your Links
