@@ -35,12 +35,25 @@ Linker is a modern web app that lets users create an account, log in, and manage
 | `/`              | Main Page                          |
 
 
-## 🔧 Setup
+## 🚀 Getting Started (GitHub Setup)
+
+### 1. Clone the Repository
+**Should Have Node Installed**
 
 ```bash
+git clone https://github.com/ShadowAdi/linker_frontend.git
 cd frontend
+
+2. Install Dependencies
+
 npm install
+
+4. Start the Development Server
+
 npm run dev
+
+The app should now be running on: http://localhost:5173
+
 
 🌐 API Base URL
 
