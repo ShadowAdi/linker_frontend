@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useUser } from "../store/UserAuthContext";
 import type { JSX } from "react";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 
 interface Props {
   children: JSX.Element;

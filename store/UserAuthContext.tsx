@@ -1,4 +1,4 @@
-import React, {
+import  {
   createContext,
   useContext,
   useState,
@@ -8,7 +8,6 @@ import React, {
 import axios from "axios";
 import { type UserType } from "../types/userType";
 import { BASE_URL } from "../constants/baseUrl";
-import { useNavigate } from "react-router-dom";
 
 type UserContextType = {
   user: UserType | null;

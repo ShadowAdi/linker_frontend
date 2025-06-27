@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants/baseUrl";
-import { toast } from "react-toastify";
 import { type LinkDataType } from "../../types/linkType";
 import { useUser } from "../../store/UserAuthContext";
 
