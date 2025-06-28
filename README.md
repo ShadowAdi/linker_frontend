@@ -53,7 +53,7 @@ npm install
 npm run dev
 
 The app should now be running on: http://localhost:5173
-
+```
 
 🌐 API Base URL
 
@@ -68,3 +68,8 @@ JWT is stored in localStorage
 Context provides access to getToken() and auth state
 
 All protected requests use the token in Authorization header
+
+# **Demo Video**
+You Can Find this inside the Demo Folder
+Github - https://github.com/ShadowAdi/linker_frontend/blob/master/demo/Linker%20Demo.mp4
+Drive - https://drive.google.com/file/d/1k-gYXRSA59fiU7Z2WrLtORUzcAT2tYjz/view?usp=sharing
