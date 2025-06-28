@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../store/UserAuthContext";
+import React from "react";
 
 const Header = () => {
   const { user, logout } = useUser();
   const navigate = useNavigate();
   const logoutBtn = async () => {
     logout();
-    navigate("/home");
+    navigate("/");
   };
 
   return (
